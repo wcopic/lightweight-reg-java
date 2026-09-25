@@ -4,7 +4,7 @@ Trámite is a lightweight Java Swing desktop application for registering, findin
 
 ## Origin and credits
 
-**Created by Renato Rodríguez Oshiro (`@wcopic`) for the Data Structures I (*Estructuras de Datos 1*) course.** I conceived and originally built the application, including its custom singly, doubly, and circular linked lists.
+**Created by Renato Rodriguez (`@wcopic`) for the Data Structures I (*Estructuras de Datos 1*) course.** I conceived and originally built the application, including its custom singly, doubly, and circular linked lists.
 
 **AI assistance:** After the original implementation, I used ChatGPT to review and clean up the code, correct parts of the application logic, and redesign the Swing interface. The original project and academic work are mine.
 
