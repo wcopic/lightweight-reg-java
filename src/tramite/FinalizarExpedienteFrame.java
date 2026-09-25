@@ -5,7 +5,6 @@
 package tramite;
 
 import javax.swing.JOptionPane;
-import java.time.LocalDateTime;
 /**
  *
  * @author renat
@@ -137,26 +136,23 @@ public class FinalizarExpedienteFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_txtDocResultadoActionPerformed
 
     private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
-    String id = txtID.getText();
-        String docResultado = txtDocResultado.getText();
+        String id = txtID.getText().trim();
+        String docResultado = txtDocResultado.getText().trim();
 
         if (id.isEmpty() || docResultado.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor completa todos los campos.");
             return;
         }
 
-        for (Expediente e : InterfazGlobal.listaExpedientes.toList()) {
-            if (e.getId().equals(id)) {
-                e.setFechaFin(LocalDateTime.now());
-                e.setDocumentoResultado(docResultado);
-                InterfazGlobal.listaCircularAlertas.remove(e);
-                JOptionPane.showMessageDialog(this, "Trámite finalizado.");
-                this.dispose();
-                return;
-            }
+        try {
+            InterfazGlobal.expedientes.finalizar(id, docResultado);
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+            return;
         }
-
-        JOptionPane.showMessageDialog(this, "Expediente no encontrado.");
+        JOptionPane.showMessageDialog(this, "Trámite finalizado.");
+        new MainMenu().setVisible(true);
+        dispose();
     
     }//GEN-LAST:event_btnFinalizarActionPerformed
 

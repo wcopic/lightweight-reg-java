@@ -15,8 +15,9 @@ public class AlertasFrame extends javax.swing.JFrame {
      */
     public AlertasFrame() {
         initComponents();
+        setLocationRelativeTo(null);
         StringBuilder sb = new StringBuilder();
-        for (Expediente e : InterfazGlobal.listaCircularAlertas.toList()) {
+        for (Expediente e : InterfazGlobal.expedientes.alertas()) {
         sb.append("ID: ").append(e.getId())
           .append(" | Prioridad: ").append(e.getPrioridad())
           .append(" | Asunto: ").append(e.getAsunto())

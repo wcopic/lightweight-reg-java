@@ -5,7 +5,6 @@
 package tramite;
 
 import javax.swing.JOptionPane;
-import java.time.LocalDateTime;
 
 /**
  *
@@ -160,7 +159,7 @@ public class MovimientoExpedienteFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_txtDocResultadoActionPerformed
 
     private void btnRegistrarMovActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarMovActionPerformed
-        String id = txtID.getText();
+        String id = txtID.getText().trim();
         String etapaSeleccionada = (String) comboEtapas.getSelectedItem();
         String docResultado = txtDocResultado.getText();
 
@@ -169,29 +168,17 @@ public class MovimientoExpedienteFrame extends javax.swing.JFrame {
             return;
         }
 
-        for (Expediente e : InterfazGlobal.listaExpedientes.toList()) {
-            if (e.getId().equals(id)) {
-                // Registra el 
-                Movimiento m = new Movimiento(etapaSeleccionada);
-                e.getSeguimiento().add(m);
-
-                // Si es finalización
-                if (etapaSeleccionada.contains("Finalizado")) {
-                    e.setFechaFin(LocalDateTime.now());
-                    e.setDocumentoResultado(docResultado);
-                    InterfazGlobal.listaCircularAlertas.remove(e);
-                    JOptionPane.showMessageDialog(this, "Movimiento registrado y trámite finalizado.");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Movimiento registrado correctamente.");
-                }
-                MainMenu menu = new MainMenu();
-                menu.setVisible(true);
-                this.dispose();
-                return;
-            }
+        try {
+            InterfazGlobal.expedientes.mover(id, etapaSeleccionada, docResultado);
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+            return;
         }
-
-        JOptionPane.showMessageDialog(this, "Expediente no encontrado.");
+        JOptionPane.showMessageDialog(this, etapaSeleccionada.contains("Finalizado")
+                ? "Movimiento registrado y trámite finalizado."
+                : "Movimiento registrado correctamente.");
+        new MainMenu().setVisible(true);
+        dispose();
     }//GEN-LAST:event_btnRegistrarMovActionPerformed
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed

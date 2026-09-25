@@ -1,16 +1,17 @@
 package tramite;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Expediente {
-    private String id;
-    private int prioridad;
-    private Interesado interesado;
-    private String asunto;
-    private String docRef;
-    private ListaSimple<Movimiento> seguimiento = new ListaSimple<>();
+    private final String id;
+    private final int prioridad;
+    private final Interesado interesado;
+    private final String asunto;
+    private final String docRef;
+    private final ListaSimple<Movimiento> seguimiento = new ListaSimple<>();
 
-    private LocalDateTime fechaInicio = LocalDateTime.now(); 
+    private final LocalDateTime fechaInicio = LocalDateTime.now();
     private LocalDateTime fechaFin;
     private String documentoResultado;
 
@@ -38,8 +39,14 @@ public class Expediente {
     public String getDocRef() { 
         return docRef; 
     }
-    public ListaSimple<Movimiento> getSeguimiento() { 
-        return seguimiento; 
+    public List<Movimiento> getSeguimiento() {
+        return seguimiento.toList();
+    }
+    void agregarMovimiento(Movimiento movimiento) {
+        if (fechaFin != null) {
+            throw new IllegalStateException("El expediente ya está finalizado.");
+        }
+        seguimiento.add(movimiento);
     }
     public LocalDateTime getFechaInicio() { 
         return fechaInicio; 
@@ -52,12 +59,11 @@ public class Expediente {
     }
 
     
-    public void setFechaFin(LocalDateTime fechaFin) {
-        this.fechaFin = fechaFin;
-    }
-
-    public void setDocumentoResultado(String documentoResultado) {
+    void finalizar(String documentoResultado) {
+        if (fechaFin != null) {
+            throw new IllegalStateException("El expediente ya está finalizado.");
+        }
         this.documentoResultado = documentoResultado;
+        this.fechaFin = LocalDateTime.now();
     }
 }
-
