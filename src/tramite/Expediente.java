@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Expediente {
     private final String id;
-    private final int prioridad;
+    private final Prioridad prioridad;
     private final Interesado interesado;
     private final String asunto;
     private final String docRef;
@@ -15,7 +15,7 @@ public class Expediente {
     private LocalDateTime fechaFin;
     private String documentoResultado;
 
-    public Expediente(String id, int prioridad, Interesado interesado, String asunto, String docRef) {
+    public Expediente(String id, Prioridad prioridad, Interesado interesado, String asunto, String docRef) {
         this.id = id;
         this.prioridad = prioridad;
         this.interesado = interesado;
@@ -27,7 +27,7 @@ public class Expediente {
     public String getId() { 
         return id; 
     }
-    public int getPrioridad() { 
+    public Prioridad getPrioridad() {
         return prioridad; 
     }
     public Interesado getInteresado() { 
