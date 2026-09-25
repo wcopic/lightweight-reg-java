@@ -1,30 +1,38 @@
-# Trámite · Registro de expedientes
+# Trámite — Case Tracking for Any Organization
 
-Aplicación de escritorio en Java Swing para registrar, consultar, priorizar, mover y finalizar expedientes. Está pensada para organizaciones de cualquier tipo y usa listas enlazadas simple, doble y circular como ejercicio de estructuras de datos.
+Trámite is a lightweight Java Swing desktop application for registering, finding, prioritizing, tracking, and closing cases or requests. Its labels and workflow are intentionally organization-neutral: a business, nonprofit, public office, or other team can use it as a starting point for its own case-tracking process.
 
-## Ejecutar
+## Origin and credits
 
-Requiere **JDK 21**. El proyecto usa Ant (compatible con NetBeans), sin dependencias externas ni configuración de cuentas.
+**Created by Renato Rodríguez Oshiro (`@wcopic`) for the Data Structures I (*Estructuras de Datos 1*) course.** I conceived and originally built the application, including its custom singly, doubly, and circular linked lists.
 
-Abre esta carpeta como proyecto en NetBeans y ejecuta **Run Project**, o usa:
+**AI assistance:** After the original implementation, I used ChatGPT to review and clean up the code, correct parts of the application logic, and redesign the Swing interface. The original project and academic work are mine.
+
+## What it does
+
+- Displays cases in a searchable list with status and priority filters. Search by case ID, subject, requester name, or identification number, then select a case to see its details and movement history.
+- Offers four selectable priority levels: **Low, Medium, High, and Very High** (shown in Spanish in the application). Open cases appear first, ordered by priority and then by creation time. The dashboard highlights open high-priority cases.
+- Records movements through general-purpose stages and closes a case with a result-document reference. Closed cases retain their history and cannot be changed again.
+- Assigns consecutive IDs such as `EXP-001`. Document references are text entries; the application does not upload or store files.
+
+## Run it
+
+Requires **JDK 21**. The project uses Ant and can be opened in NetBeans; it has no external dependencies or account setup.
+
+Open the repository as a project in NetBeans and select **Run Project**, or run:
 
 ```sh
 ant clean jar
 java -jar dist/tramite.jar
 ```
 
-La clase principal es `tramite.MainMenu` y abre directamente el panel.
+The entry point is `tramite.MainMenu`, which opens the dashboard directly.
 
-## Uso
+## Current scope
 
-- El panel muestra todos los expedientes, sus estados y un detalle con el historial. Busca por ID, asunto, nombre o identificación; filtra por estado y prioridad.
-- Al crear un expediente elige **Baja, Media, Alta o Muy alta**. Los abiertos aparecen primero, ordenados por prioridad descendente y, en caso de empate, por antigüedad. El panel cuenta los abiertos de prioridad alta o muy alta.
-- Registra movimientos mediante etapas genéricas o finaliza el expediente indicando un documento de resultado. Una etapa final también requiere ese documento. Un expediente finalizado conserva su historial y ya no admite cambios.
-- Las referencias de documentos son **texto**, no archivos adjuntos. No se copia ni se almacena ningún archivo.
+This is an academic prototype that any organization can run and adapt, **not a production deployment**. Cases are held only in memory: closing the application clears them and resets the ID counter. There is no database, user authentication, role-based access control, or file storage. Avoid entering real sensitive records until those capabilities are implemented.
 
-Los datos existen **solo durante la sesión**: al cerrar la aplicación se pierden y los IDs vuelven a empezar. No hay base de datos, cuentas de usuario ni control de acceso por roles. No introduzcas datos reales o sensibles en este prototipo.
-
-## Pruebas
+## Run the regression checks
 
 ```sh
 mkdir -p build/test-manual
@@ -32,4 +40,4 @@ javac -encoding UTF-8 -d build/test-manual src/tramite/*.java test/tramite/Gesto
 java -ea -cp build/test-manual tramite.GestorExpedientesTest
 ```
 
-La interfaz se construye con Swing directamente en las clases Java. `nbproject` y `build.xml` configuran el proyecto Ant; `build/`, `dist/` y `nbproject/private/` se generan localmente y están ignorados por Git.
+The Swing interface is implemented directly in Java. `build.xml` and `nbproject/` contain the Ant/NetBeans project configuration; generated output and local settings are excluded from Git.
