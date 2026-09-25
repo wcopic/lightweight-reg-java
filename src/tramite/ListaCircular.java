@@ -3,7 +3,7 @@ package tramite;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListaCircular<T> { //alertas
+public class ListaCircular<T> {
     private Nodo<T> inicio;
 
     public void add(T x) {

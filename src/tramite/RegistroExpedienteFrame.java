@@ -13,7 +13,6 @@ public class RegistroExpedienteFrame extends javax.swing.JFrame {
     /**
      * Creates new form RegistroExpedienteFrame
      */
-    private static int contadorID = 1;
     
     public RegistroExpedienteFrame() {
         initComponents();
@@ -23,8 +22,7 @@ public class RegistroExpedienteFrame extends javax.swing.JFrame {
     }
     
     private void generarID() {
-        String nuevoID = "EXP-" + String.format("%03d", contadorID); // Ej: EXP-001
-        txtID.setText(nuevoID);
+        txtID.setText(InterfazGlobal.expedientes.siguienteId());
     }
 
     /**
@@ -253,28 +251,24 @@ public class RegistroExpedienteFrame extends javax.swing.JFrame {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         try {
-            String id = txtID.getText();
-            int prioridad = Integer.parseInt(txtPrioridad.getText());
-            String dni = txtDNI.getText();
-            String nombre = txtNombre.getText();
+            int prioridad = Integer.parseInt(txtPrioridad.getText().trim());
+            String dni = txtDNI.getText().trim();
+            String nombre = txtNombre.getText().trim();
             boolean esInterno = chkInterno.isSelected();
             String asunto = txtAsunto.getText();
             String docRef = txtDocRef.getText();
 
-            Interesado interesado = new Interesado(dni, nombre, "", "", esInterno); 
-            Expediente expediente = new Expediente(id, prioridad, interesado, asunto, docRef);
-
-            InterfazGlobal.listaExpedientes.add(expediente);
-            InterfazGlobal.listaCircularAlertas.add(expediente);
-
-            contadorID++; // actualiza para el próximo ID
+            Interesado interesado = new Interesado(dni, nombre, "", "", esInterno);
+            InterfazGlobal.expedientes.registrar(prioridad, interesado, asunto, docRef);
 
             JOptionPane.showMessageDialog(this, "Expediente registrado correctamente");
             MainMenu menu = new MainMenu();
             menu.setVisible(true);
             this.dispose();
             
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "La prioridad debe ser un número entero positivo.");
+        } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this, "Error al registrar: " + e.getMessage());
         }
         

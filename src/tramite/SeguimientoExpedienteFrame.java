@@ -4,7 +4,6 @@
  */
 package tramite;
 import javax.swing.JOptionPane;
-import java.time.LocalDateTime;
 /**
  *
  * @author renat
@@ -16,6 +15,7 @@ public class SeguimientoExpedienteFrame extends javax.swing.JFrame {
      */
     public SeguimientoExpedienteFrame() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -118,34 +118,35 @@ public class SeguimientoExpedienteFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_txtIDActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-    String id = txtID.getText();
+        String id = txtID.getText().trim();
 
-    if (id.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Ingresa un ID de expediente.");
-        return;
-    }
+        if (id.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingresa un ID de expediente.");
+            return;
+        }
 
-    for (Expediente e : InterfazGlobal.listaExpedientes.toList()) {
-        if (e.getId().equals(id)) {
+        Expediente e = InterfazGlobal.expedientes.buscar(id);
+        if (e != null) {
             StringBuilder sb = new StringBuilder();
             sb.append("Asunto: ").append(e.getAsunto()).append("\n");
             sb.append("Inicio: ").append(e.getFechaInicio()).append("\n");
             if (e.getFechaFin() != null) {
                 sb.append("Fin: ").append(e.getFechaFin()).append("\n");
+                sb.append("Documento de resultado: ").append(e.getDocumentoResultado()).append("\n");
             }
             
             sb.append("Movimientos:\n");
 
-            for (Movimiento m : e.getSeguimiento().toList()) {
+            for (Movimiento m : e.getSeguimiento()) {
                 sb.append("- ").append(m.getDependencia()).append(" @ ").append(m.getFechaHora()).append("\n");
             }
 
             txtResultado.setText(sb.toString());
             return;
         }
-    }
 
-    JOptionPane.showMessageDialog(this, "Expediente no encontrado.");
+        txtResultado.setText("");
+        JOptionPane.showMessageDialog(this, "Expediente no encontrado.");
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed

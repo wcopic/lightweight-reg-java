@@ -3,8 +3,8 @@ package tramite;
 import java.time.LocalDateTime;
 
 public class Movimiento {
-    private String dependencia;
-    private LocalDateTime fechaHora;
+    private final String dependencia;
+    private final LocalDateTime fechaHora;
 
     public Movimiento(String dependencia) {
         this.dependencia = dependencia;

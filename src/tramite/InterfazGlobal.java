@@ -5,7 +5,8 @@
 package tramite;
 
 public class InterfazGlobal {
-    public static ListaDoble<Expediente> listaExpedientes = new ListaDoble<>();
-    public static ListaCircular<Expediente> listaCircularAlertas = new ListaCircular<>();
-}
+    public static final GestorExpedientes expedientes = new GestorExpedientes();
 
+    private InterfazGlobal() {
+    }
+}

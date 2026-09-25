@@ -1,0 +1,11 @@
+# NetBeans output and local settings
+/build/
+/dist/
+/nbproject/private/
+/nbproject/genfiles.properties
+
+# Editor and operating system files
+.idea/
+.vscode/
+*.class
+.DS_Store

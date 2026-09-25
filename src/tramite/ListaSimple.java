@@ -1,11 +1,9 @@
 package tramite;
 
-import tramite.Nodo;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListaSimple<T> { //movimiento
+public class ListaSimple<T> {
     private Nodo<T> head;
 
     public void add(T x) {
@@ -41,4 +39,3 @@ public class ListaSimple<T> { //movimiento
         return lista;
     }
 }
-

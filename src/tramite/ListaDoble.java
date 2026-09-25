@@ -3,7 +3,7 @@ package tramite;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListaDoble<T> { //expedientes
+public class ListaDoble<T> {
     private Nodo<T> head, tail, current;
 
     public void add(T x) {
@@ -47,4 +47,3 @@ public class ListaDoble<T> { //expedientes
         return lista;
     }
 }
-

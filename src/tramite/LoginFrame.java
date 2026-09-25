@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package tramite;
+import java.util.Arrays;
 import javax.swing.JOptionPane;
 /**
  *
@@ -108,10 +109,21 @@ public class LoginFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_txtUsuarioActionPerformed
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-        String usuario = txtUsuario.getText();
-        String clave = new String(txtPassword.getPassword());
+        String usuarioConfigurado = System.getenv("TRAMITE_USER");
+        String claveConfigurada = System.getenv("TRAMITE_PASSWORD");
+        if (usuarioConfigurado == null || usuarioConfigurado.isBlank()
+                || claveConfigurada == null || claveConfigurada.isBlank()) {
+            JOptionPane.showMessageDialog(this, "Configura TRAMITE_USER y TRAMITE_PASSWORD antes de iniciar.");
+            return;
+        }
+        char[] clave = txtPassword.getPassword();
+        char[] esperada = claveConfigurada.toCharArray();
+        boolean valida = txtUsuario.getText().equals(usuarioConfigurado) && Arrays.equals(clave, esperada);
+        Arrays.fill(clave, '\0');
+        Arrays.fill(esperada, '\0');
+        txtPassword.setText("");
 
-        if (usuario.equals("admin") && clave.equals("1234")) {
+        if (valida) {
             MainMenu menu = new MainMenu();
             menu.setVisible(true);
             this.dispose(); // Cierra login
