@@ -1,6 +1,8 @@
 package tramite;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 /** Operaciones y reglas de negocio de los expedientes durante esta sesión. */
 public final class GestorExpedientes {
@@ -12,13 +14,13 @@ public final class GestorExpedientes {
         return String.format("EXP-%03d", siguienteNumero);
     }
 
-    public Expediente registrar(int prioridad, Interesado interesado, String asunto, String docRef) {
-        if (prioridad <= 0) {
-            throw new IllegalArgumentException("La prioridad debe ser un número positivo.");
+    public Expediente registrar(Prioridad prioridad, Interesado interesado, String asunto, String docRef) {
+        if (prioridad == null) {
+            throw new IllegalArgumentException("Selecciona una prioridad.");
         }
-        if (interesado == null || interesado.getDni() == null || interesado.getDni().isBlank()
+        if (interesado == null || interesado.getIdentificacion() == null || interesado.getIdentificacion().isBlank()
                 || interesado.getNombre() == null || interesado.getNombre().isBlank()) {
-            throw new IllegalArgumentException("Ingresa el DNI y el nombre del interesado.");
+            throw new IllegalArgumentException("Ingresa la identificación y el nombre del solicitante.");
         }
         if (asunto == null || asunto.isBlank()) {
             throw new IllegalArgumentException("Ingresa el asunto del expediente.");
@@ -44,17 +46,16 @@ public final class GestorExpedientes {
         return null;
     }
 
-    public void mover(String id, String etapa, String documentoResultado) {
+    public void mover(String id, Etapa etapa, String documentoResultado) {
         Expediente expediente = exigirAbierto(id);
-        if (etapa == null || etapa.isBlank()) {
+        if (etapa == null) {
             throw new IllegalArgumentException("Selecciona una etapa.");
         }
-        boolean finaliza = etapa.contains("Finalizado");
-        if (finaliza && (documentoResultado == null || documentoResultado.isBlank())) {
+        if (etapa.finaliza() && (documentoResultado == null || documentoResultado.isBlank())) {
             throw new IllegalArgumentException("Ingresa el documento de resultado para finalizar.");
         }
-        expediente.agregarMovimiento(new Movimiento(etapa.trim()));
-        if (finaliza) {
+        expediente.agregarMovimiento(new Movimiento(etapa.toString()));
+        if (etapa.finaliza()) {
             cerrar(expediente, documentoResultado);
         }
     }
@@ -69,7 +70,21 @@ public final class GestorExpedientes {
     }
 
     public List<Expediente> alertas() {
-        return alertas.toList();
+        List<Expediente> pendientes = alertas.toList();
+        pendientes.sort(ordenPrioridad());
+        return pendientes;
+    }
+
+    public List<Expediente> listar() {
+        List<Expediente> lista = new ArrayList<>(expedientes.toList());
+        lista.sort(Comparator.comparing((Expediente e) -> e.getFechaFin() != null)
+                .thenComparing(ordenPrioridad()));
+        return lista;
+    }
+
+    private Comparator<Expediente> ordenPrioridad() {
+        return Comparator.comparingInt((Expediente e) -> e.getPrioridad().getNivel()).reversed()
+                .thenComparing(Expediente::getFechaInicio);
     }
 
     private Expediente exigirAbierto(String id) {

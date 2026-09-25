@@ -1,28 +1,30 @@
-# Registro de expedientes (Java)
+# Trámite · Registro de expedientes
 
-Aplicación de escritorio hecha con Java Swing y NetBeans para registrar, mover, consultar y finalizar expedientes. Usa listas enlazadas simple, doble y circular como ejercicio de estructuras de datos.
+Aplicación de escritorio en Java Swing para registrar, consultar, priorizar, mover y finalizar expedientes. Está pensada para organizaciones de cualquier tipo y usa listas enlazadas simple, doble y circular como ejercicio de estructuras de datos.
 
-## Requisitos y ejecución
+## Ejecutar
 
-- JDK 21 y NetBeans (proyecto Ant, sin dependencias externas).
-- Define las variables de entorno `TRAMITE_USER` y `TRAMITE_PASSWORD` antes de iniciar NetBeans o ejecutar el JAR. Por ejemplo, en PowerShell:
+Requiere **JDK 21**. El proyecto usa Ant (compatible con NetBeans), sin dependencias externas ni configuración de cuentas.
 
-  ```powershell
-  $env:TRAMITE_USER = "usuario-local"
-  $env:TRAMITE_PASSWORD = "elige-una-clave"
-  ```
+Abre esta carpeta como proyecto en NetBeans y ejecuta **Run Project**, o usa:
 
-- Abre la carpeta del repositorio como proyecto en NetBeans y ejecuta **Run Project**. También puedes usar `ant clean jar` y `java -jar dist/tramite.jar` con Ant y JDK 21 instalados.
+```sh
+ant clean jar
+java -jar dist/tramite.jar
+```
 
-## Funcionamiento
+La clase principal es `tramite.MainMenu` y abre directamente el panel.
 
-Al registrar un expediente se le asigna un ID consecutivo (`EXP-001`, etc.) y aparece en las alertas mientras esté abierto. Registrar una etapa final o usar la opción de finalizar requiere un documento de resultado; después se conserva el historial y ya no se aceptan movimientos ni cierres adicionales.
+## Uso
 
-Los expedientes se guardan **solo en memoria**: se pierden al cerrar la aplicación y los IDs vuelven a empezar. El login usa credenciales locales del entorno para evitar contraseñas publicadas en el código; **no es un sistema de autenticación para producción**. Esta aplicación no cuenta con base de datos, cuentas de usuario ni control de acceso por roles.
+- El panel muestra todos los expedientes, sus estados y un detalle con el historial. Busca por ID, asunto, nombre o identificación; filtra por estado y prioridad.
+- Al crear un expediente elige **Baja, Media, Alta o Muy alta**. Los abiertos aparecen primero, ordenados por prioridad descendente y, en caso de empate, por antigüedad. El panel cuenta los abiertos de prioridad alta o muy alta.
+- Registra movimientos mediante etapas genéricas o finaliza el expediente indicando un documento de resultado. Una etapa final también requiere ese documento. Un expediente finalizado conserva su historial y ya no admite cambios.
+- Las referencias de documentos son **texto**, no archivos adjuntos. No se copia ni se almacena ningún archivo.
 
-## Pruebas de la lógica
+Los datos existen **solo durante la sesión**: al cerrar la aplicación se pierden y los IDs vuelven a empezar. No hay base de datos, cuentas de usuario ni control de acceso por roles. No introduzcas datos reales o sensibles en este prototipo.
 
-Desde la raíz del proyecto, con JDK 21:
+## Pruebas
 
 ```sh
 mkdir -p build/test-manual
@@ -30,4 +32,4 @@ javac -encoding UTF-8 -d build/test-manual src/tramite/*.java test/tramite/Gesto
 java -ea -cp build/test-manual tramite.GestorExpedientesTest
 ```
 
-El directorio `src/tramite` conserva los formularios `.form` junto a sus clases, para que NetBeans pueda seguir editándolos. `nbproject` y `build.xml` contienen la configuración del proyecto Ant; `build/`, `dist/` y `nbproject/private/` son archivos locales generados y están excluidos de Git.
+La interfaz se construye con Swing directamente en las clases Java. `nbproject` y `build.xml` configuran el proyecto Ant; `build/`, `dist/` y `nbproject/private/` se generan localmente y están ignorados por Git.
